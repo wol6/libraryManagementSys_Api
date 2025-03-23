@@ -1,4 +1,4 @@
-import { bookModel } from "../../schema/books/books"
+import { bookModel } from "../../schema/books/books.js"
 
 
 export const addBook = async (req, res) => {
