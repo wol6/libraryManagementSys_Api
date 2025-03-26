@@ -1,10 +1,12 @@
 import express from 'express'
 import mongoose from 'mongoose';
+import cors from 'cors'
 import dotenv from 'dotenv'
 const app = express();
 const dotEnv = dotenv.config()
 import route from './routes/route.js';
 
+app.use(cors())
 app.use(express.json()) //middle ware to parese json requests
 app.use('/',route)
 

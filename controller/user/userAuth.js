@@ -4,9 +4,9 @@ import { userModel } from "../../schema/user/user.js";
 export const signUp = async (req, res) => {
     try {
 
-        const { username, fullname, email, password } = req.body
+        const { userName, fullName, emailId, password } = req.body.userObj
 
-        const existingUser = await userModel.find({ email }).lean()
+        const existingUser = await userModel.find({email: emailId }).lean()
 
         if (existingUser.length > 0) {
             return res.json({
@@ -16,7 +16,10 @@ export const signUp = async (req, res) => {
             })
         }
 
-        await userModel.create({ username, fullname, email, password })
+        await userModel.create({
+            username: userName, fullname: fullName,
+            email: emailId, password
+        })
 
         return res.json({
             success: true,
@@ -28,14 +31,14 @@ export const signUp = async (req, res) => {
     }
 }
 
-export const sigIn = async (req,res)=>{
-    try{
+export const sigIn = async (req, res) => {
+    try {
 
-        const {username,password} = req.body
+        const { username, password } = req.body
 
-        const user = await userModel.findOne({username,password}).lean()
+        const user = await userModel.findOne({ username, password }).lean()
 
-        if(!user){
+        if (!user) {
             return res.json({
                 msg: 'User Not Found',
                 success: false
@@ -48,7 +51,7 @@ export const sigIn = async (req,res)=>{
             success: true
         })
 
-    }catch(err){
+    } catch (err) {
         console.log(err)
     }
 }
