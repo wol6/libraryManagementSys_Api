@@ -34,9 +34,9 @@ export const signUp = async (req, res) => {
 export const sigIn = async (req, res) => {
     try {
 
-        const { username, password } = req.body
+        const { userName, password } = req.body
 
-        const user = await userModel.findOne({ username, password }).lean()
+        const user = await userModel.findOne({ username:userName, password }).lean()
 
         if (!user) {
             return res.json({
@@ -46,7 +46,6 @@ export const sigIn = async (req, res) => {
         }
 
         return res.json({
-            user,
             msg: 'success',
             success: true
         })

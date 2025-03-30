@@ -3,7 +3,7 @@ import { bookModel } from "../../schema/books/books.js"
 
 export const addBook = async (req, res) => {
     try {
-        const { bookname, author, availabilityStatus } = req.body
+        const { bookname, author, imgurl } = req.body
 
         const existingBook = await bookModel.find({ bookname }).lean()
 
@@ -15,7 +15,7 @@ export const addBook = async (req, res) => {
             })
         }
 
-        await bookModel.create({bookname,author,availabilityStatus })
+        await bookModel.create({bookname,author,imgurl })
 
         return res.json({
             success: true,
