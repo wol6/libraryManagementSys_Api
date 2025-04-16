@@ -1,5 +1,26 @@
 import { bookModel } from "../../schema/books/books.js"
 
+export const getAllBooks = async (req, res) => {
+    try {
+        const books = await bookModel.find().lean()
+
+        if (!books) {
+            return res.json({
+                success: false,
+                message: "No Books",
+            })
+        }
+
+        return res.json({
+            success: true,
+            message: "All Books",
+            books
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 
 export const addBook = async (req, res) => {
     try {
@@ -15,7 +36,7 @@ export const addBook = async (req, res) => {
             })
         }
 
-        await bookModel.create({bookname,author,imgurl })
+        await bookModel.create({ bookname, author, imgurl })
 
         return res.json({
             success: true,
