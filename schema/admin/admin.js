@@ -17,6 +17,10 @@ const adminSchema = mongoose.Schema({
         type:String,
         required:true
     },
+    isAuthorized: {
+        type: Boolean,
+        default: false, 
+      },
 })
 
 export const adminModel = mongoose.model('admins',adminSchema)

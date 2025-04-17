@@ -1,10 +1,32 @@
+import { adminModel } from "../../schema/admin/admin.js";
 import { userModel } from "../../schema/user/user.js";
 
 
 export const signUp = async (req, res) => {
     try {
 
-        const { userName, fullName, emailId, password } = req.body.userObj
+        const { userName, fullName, emailId, password,admin } = req.body.userObj
+
+        if(admin){
+            const existingAdmin = await adminModel.find({email: emailId }).lean()
+            if (existingAdmin.length > 0) {
+                return res.json({
+                    email: existingAdmin.email,
+                    msg: 'Email Already Exists',
+                    success: false
+                })
+            }
+            await adminModel.create({
+                username: userName, fullname: fullName,
+                email: emailId, password
+            })
+    
+            return res.json({
+                success: true,
+                message: "Admin Registered Successfully",
+            })
+
+        }
 
         const existingUser = await userModel.find({email: emailId }).lean()
 
@@ -34,7 +56,23 @@ export const signUp = async (req, res) => {
 export const sigIn = async (req, res) => {
     try {
 
-        const { userName, password } = req.body
+        const { userName, password,admin } = req.body
+
+        if(admin){
+        const adminer = await adminModel.findOne({ username:userName, password }).lean()
+        
+        if (!adminer) {
+            return res.json({
+                msg: 'Admin Not Found',
+                success: false
+            })
+        }
+
+        return res.json({
+            msg: 'success',
+            success: true
+        })
+        }
 
         const user = await userModel.findOne({ username:userName, password }).lean()
 
