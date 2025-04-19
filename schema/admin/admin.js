@@ -21,6 +21,10 @@ const adminSchema = mongoose.Schema({
         type: Boolean,
         default: false, 
       },
+      token:{
+        type:String,
+        required:false
+    } ,
 })
 
 export const adminModel = mongoose.model('admins',adminSchema)
