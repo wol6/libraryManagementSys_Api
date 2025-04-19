@@ -8,7 +8,7 @@ import route from './routes/route.js';
 
 app.use(cors())
 app.use(express.json()) //middle ware to parese json requests
-app.use('/',route)
+app.use('/api',route)
 
 // Sample Route
 app.get('/', (req, res) => {
