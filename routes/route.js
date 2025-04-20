@@ -8,8 +8,8 @@ import authenticateToken from "../middleware/authentication.js";
 
 const route = express.Router()
 
-route.post('/admin/signup',adminSignUp)
-route.post('/admin/signin',adminSignIn)
+// route.post('/admin/signup',adminSignUp)
+// route.post('/admin/signin',adminSignIn)
 
 route.post('/signup',signUp)
 route.post('/signin',sigIn)

@@ -1,7 +1,7 @@
 import { adminModel } from "../../schema/admin/admin.js";
 import { userModel } from "../../schema/user/user.js";
 import jwt from 'jsonwebtoken'
-
+import bcrypt from 'bcrypt';
 
 export const signUp = async (req, res) => {
     try {
@@ -10,6 +10,7 @@ export const signUp = async (req, res) => {
 
         if (admin) {
             const existingAdmin = await adminModel.find({ email: emailId }).lean()
+
             if (existingAdmin.length > 0) {
                 return res.json({
                     email: existingAdmin.email,
@@ -17,9 +18,11 @@ export const signUp = async (req, res) => {
                     success: false
                 })
             }
+            const hashPassword = await bcrypt.hash(password, 10)
+
             await adminModel.create({
                 username: userName, fullname: fullName,
-                email: emailId, password
+                email: emailId, password: hashPassword
             })
 
             return res.json({
@@ -38,10 +41,11 @@ export const signUp = async (req, res) => {
                 success: false
             })
         }
+        const hashPassword = await bcrypt.hash(password, 10)
 
         await userModel.create({
             username: userName, fullname: fullName,
-            email: emailId, password
+            email: emailId, password:hashPassword
         })
 
         return res.json({
@@ -60,41 +64,49 @@ export const sigIn = async (req, res) => {
         const { userName, password, admin } = req.body
 
         if (admin) {
-            const adminer = await adminModel.findOne({ username: userName, password })
+            const adminer = await adminModel.findOne({ username: userName })
 
             if (!adminer) {
                 return res.json({
-                    msg: 'Admin Not Found',
+                    msg: 'Invalid credentials',
                     success: false
                 })
             }
+            const isValidPassword = await bcrypt.compare(password,adminer.password)
+            if (!isValidPassword) {
+                return res.status(401).json({success:false, message: 'Invalid credentials' });
+            }
+
             const jwtToken = generateJwtToken(adminer._id)
             adminer.token = jwtToken
             await adminer.save()
 
             return res.json({
                 msg: 'success',
-                token:jwtToken,
+                token: jwtToken,
                 success: true
             })
         }
 
-        const user = await userModel.findOne({ username: userName, password })
+        const user = await userModel.findOne({ username: userName })
 
         if (!user) {
             return res.json({
-                msg: 'User Not Found',
+                msg: 'Invalid credentials',
                 success: false
             })
         }
-
+        const isValidPassword = await bcrypt.compare(password,user.password)
+        if (!isValidPassword) {
+            return res.status(401).json({success:false, message: 'Invalid credentials' });
+        }
         const jwtToken = generateJwtToken(user._id)
         user.token = jwtToken
         await user.save()
 
         return res.json({
             msg: 'success',
-            token:jwtToken,
+            token: jwtToken,
             success: true
         })
 
