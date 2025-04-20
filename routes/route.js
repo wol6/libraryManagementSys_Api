@@ -14,7 +14,7 @@ route.post('/admin/signin',adminSignIn)
 route.post('/signup',signUp)
 route.post('/signin',sigIn)
 
-route.get('/getbook',getAllBooks)
+route.get('/getbook',authenticateToken,getAllBooks)
 route.post('/addbook',authenticateToken,addBook)
 
 route.get('/getusers',getAllUsers)
