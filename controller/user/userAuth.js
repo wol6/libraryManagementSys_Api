@@ -84,6 +84,8 @@ export const sigIn = async (req, res) => {
             return res.json({
                 msg: 'success',
                 token: jwtToken,
+                isAdmin:true,
+                name:adminer.fullname,
                 success: true
             })
         }
@@ -107,6 +109,8 @@ export const sigIn = async (req, res) => {
         return res.json({
             msg: 'success',
             token: jwtToken,
+            isUser:true,
+            name:user.fullname,
             success: true
         })
 

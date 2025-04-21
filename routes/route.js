@@ -14,7 +14,7 @@ const route = express.Router()
 route.post('/signup',signUp)
 route.post('/signin',sigIn)
 
-route.get('/getbook',authenticateToken,getAllBooks)
+route.get('/getbook',getAllBooks)
 route.post('/addbook',authenticateToken,addBook)
 
 route.get('/getusers',getAllUsers)
