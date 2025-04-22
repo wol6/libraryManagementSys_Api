@@ -28,12 +28,12 @@ export const signUp = async (req, res) => {
         const { userName, fullName, emailId, password, admin } = value || {}
 
         if (admin) {
-            const existingAdmin = await adminModel.find({ email: emailId }).lean()
+            const existingAdmin = await adminModel.find({ username: userName }).lean()
 
             if (existingAdmin.length > 0) {
                 return res.json({
-                    email: existingAdmin.email,
-                    msg: 'Email Already Exists',
+                    email: existingAdmin.username,
+                    msg: 'User Name Already Exists',
                     success: false
                 })
             }
@@ -51,7 +51,7 @@ export const signUp = async (req, res) => {
 
         }
 
-        const existingUser = await userModel.find({ email: emailId }).lean()
+        const existingUser = await userModel.find({ username: userName }).lean()
 
         if (existingUser.length > 0) {
             return res.json({
@@ -79,8 +79,20 @@ export const signUp = async (req, res) => {
 
 export const sigIn = async (req, res) => {
     try {
+        const schema = Joi.object({
+            userName: Joi.string().required(),
+            password: Joi.string().required(),
+            admin:Joi.boolean().optional()
+        })
+        const { error, value } = schema.validate(req.body)
 
-        const { userName, password, admin } = req.body
+        if (error) {
+            return res.json({
+                success: false,
+                msg: error.message
+            })
+        }
+        const { userName, password, admin } = value
 
         if (admin) {
             const adminer = await adminModel.findOne({ username: userName })
