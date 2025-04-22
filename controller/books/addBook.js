@@ -1,3 +1,4 @@
+import Joi from "joi"
 import { bookModel } from "../../schema/books/books.js"
 
 export const getAllBooks = async (req, res) => {
@@ -24,7 +25,20 @@ export const getAllBooks = async (req, res) => {
 
 export const addBook = async (req, res) => {
     try {
-        const { bookname, author, imgurl } = req.body
+        const schema = Joi.object({
+            bookname: Joi.string().required(),
+            author: Joi.string().required(),
+            imgurl: Joi.string().required()
+        })
+        const { error, value } = schema.validate(req.body)
+        console.log(error?.message)
+        if (error) {
+            return res.json({
+                success: false,
+                msg: error.message
+            })
+        }
+        const { bookname, author, imgurl } = value || {}
 
         const existingBook = await bookModel.find({ bookname }).lean()
 

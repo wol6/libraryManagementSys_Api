@@ -2,11 +2,30 @@ import { adminModel } from "../../schema/admin/admin.js";
 import { userModel } from "../../schema/user/user.js";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt';
+import Joi from "joi";
 
 export const signUp = async (req, res) => {
     try {
+        const schema = Joi.object({
+            userName: Joi.string().required(),
+            fullName: Joi.string().required(),
+            emailId: Joi.string().required().email(),
+            password: Joi.string().required(),
+            confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
+                'any.only': 'Confirm password does not match password'
+            }),
+            admin:Joi.boolean().optional()
+        })
+        const { error, value } = schema.validate(req.body.userObj)
 
-        const { userName, fullName, emailId, password, admin } = req.body.userObj
+        if (error) {
+            return res.json({
+                success: false,
+                msg: error.message
+            })
+        }
+
+        const { userName, fullName, emailId, password, admin } = value || {}
 
         if (admin) {
             const existingAdmin = await adminModel.find({ email: emailId }).lean()
@@ -27,7 +46,7 @@ export const signUp = async (req, res) => {
 
             return res.json({
                 success: true,
-                message: "Admin Registered Successfully",
+                msg: "Admin Registered Successfully",
             })
 
         }
@@ -45,12 +64,12 @@ export const signUp = async (req, res) => {
 
         await userModel.create({
             username: userName, fullname: fullName,
-            email: emailId, password:hashPassword
+            email: emailId, password: hashPassword
         })
 
         return res.json({
             success: true,
-            message: "Registered Successfully",
+            msg: "Registered Successfully",
         })
 
     } catch (err) {
@@ -72,9 +91,9 @@ export const sigIn = async (req, res) => {
                     success: false
                 })
             }
-            const isValidPassword = await bcrypt.compare(password,adminer.password)
+            const isValidPassword = await bcrypt.compare(password, adminer.password)
             if (!isValidPassword) {
-                return res.status(401).json({success:false, message: 'Invalid credentials' });
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
             }
 
             const jwtToken = generateJwtToken(adminer._id)
@@ -84,8 +103,8 @@ export const sigIn = async (req, res) => {
             return res.json({
                 msg: 'success',
                 token: jwtToken,
-                isAdmin:true,
-                name:adminer.fullname,
+                isAdmin: true,
+                name: adminer.fullname,
                 success: true
             })
         }
@@ -98,9 +117,9 @@ export const sigIn = async (req, res) => {
                 success: false
             })
         }
-        const isValidPassword = await bcrypt.compare(password,user.password)
+        const isValidPassword = await bcrypt.compare(password, user.password)
         if (!isValidPassword) {
-            return res.status(401).json({success:false, message: 'Invalid credentials' });
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
         const jwtToken = generateJwtToken(user._id)
         user.token = jwtToken
@@ -109,8 +128,8 @@ export const sigIn = async (req, res) => {
         return res.json({
             msg: 'success',
             token: jwtToken,
-            isUser:true,
-            name:user.fullname,
+            isUser: true,
+            name: user.fullname,
             success: true
         })
 
