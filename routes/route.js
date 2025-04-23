@@ -6,6 +6,7 @@ import { addBook, getAllBooks } from "../controller/books/addBook.js";
 import { getAllUsers } from "../controller/user/user.js";
 import authenticateToken from "../middleware/authentication.js";
 import { dashboardOvrView } from "../controller/admin/dashboard.js";
+import { searchBook } from "../controller/books/searchBook.js";
 
 const route = express.Router()
 
@@ -20,5 +21,6 @@ route.post('/addbook',authenticateToken,addBook)
 
 route.get('/getdashboardcount',dashboardOvrView)
 route.get('/getusers',getAllUsers)
+route.get('/search',searchBook)
 
 export default route

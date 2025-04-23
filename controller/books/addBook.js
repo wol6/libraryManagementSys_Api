@@ -3,7 +3,10 @@ import { bookModel } from "../../schema/books/books.js"
 
 export const getAllBooks = async (req, res) => {
     try {
-        const books = await bookModel.find().lean()
+        let filterObj = {}
+        const page =parseInt( req.query.page) || 0
+        const booksPerPage = 3
+        const books = await bookModel.find(filterObj).lean().skip(page*booksPerPage).limit(booksPerPage)
 
         if (!books) {
             return res.json({
