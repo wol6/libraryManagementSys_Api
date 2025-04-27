@@ -5,7 +5,7 @@ export const getAllBooks = async (req, res) => {
     try {
         let filterObj = {}
         const page =parseInt( req.query.page) || 0
-        const booksPerPage = 3
+        const booksPerPage = parseInt( req.query.limit)
         const books = await bookModel.find(filterObj).lean().skip(page*booksPerPage).limit(booksPerPage)
 
         if (!books) {
