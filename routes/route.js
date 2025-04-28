@@ -19,8 +19,8 @@ route.post('/signin',sigIn)
 route.get('/getbook',getAllBooks)
 route.post('/addbook',authenticateToken,addBook)
 
-route.get('/getdashboardcount',dashboardOvrView)
-route.get('/getusers',getAllUsers)
+route.get('/getdashboardcount',authenticateToken,dashboardOvrView)
+route.get('/getusers',authenticateToken,getAllUsers)
 route.get('/search',searchBook)
 
 export default route

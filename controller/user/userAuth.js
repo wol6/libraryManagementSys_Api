@@ -142,6 +142,7 @@ export const sigIn = async (req, res) => {
             token: jwtToken,
             isUser: true,
             name: user.fullname,
+            userId:user._id,
             success: true
         })
 
