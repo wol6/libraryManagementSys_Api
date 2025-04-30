@@ -21,6 +21,6 @@ const userSchema = mongoose.Schema({
         type: String,
         required: false
     },
-})
+},{ timestamps: true })
 
 export const userModel = mongoose.model('users', userSchema)

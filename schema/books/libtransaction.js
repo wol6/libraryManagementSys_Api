@@ -15,10 +15,14 @@ const libTransationSchema = mongoose.Schema({
         type:Date,
         required:true
     },
+    isapproved: {
+        type: Boolean,
+        default: false, 
+      },
     transationtype:{
         type:String,
         enum:['borrowed','returned']
     },
-})
+},{ timestamps: true })
 
 export const libTransationModel = mongoose.model('librarytransation',libTransationSchema)

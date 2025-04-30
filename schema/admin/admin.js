@@ -25,6 +25,6 @@ const adminSchema = mongoose.Schema({
         type:String,
         required:false
     } ,
-})
+},{ timestamps: true })
 
 export const adminModel = mongoose.model('admins',adminSchema)
