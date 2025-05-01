@@ -50,7 +50,7 @@ export const allRequest = async (req, res) => {
     try {
 
         const allRequest = await libTransationModel
-            .find({}).lean()
+            .find({isapproved:false}).lean()
             .populate('userdetails')
             .populate('bookdetails')
 
@@ -58,6 +58,21 @@ export const allRequest = async (req, res) => {
             success: true,
             message: "",
             allRequest
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export const approveReq = async (req, res) => {
+    try {
+        const { id } = req.body
+
+        await libTransationModel.updateOne({ _id: id }, { isapproved: true })
+
+        return res.json({
+            success: true,
+            msg: 'Updated'
         })
     } catch (e) {
         console.log(e)
