@@ -7,7 +7,7 @@ import { getAllUsers } from "../controller/user/user.js";
 import authenticateToken from "../middleware/authentication.js";
 import { dashboardOvrView } from "../controller/admin/dashboard.js";
 import { searchBook } from "../controller/books/searchBook.js";
-import { userAddLibrary, userLibrary } from "../controller/user/userlibrary.js";
+import { allRequest, userAddLibrary, userLibrary } from "../controller/user/userlibrary.js";
 
 const route = express.Router()
 
@@ -25,5 +25,6 @@ route.get('/getusers',authenticateToken,getAllUsers)
 route.get('/search',searchBook)
 route.post('/updatelibrary',authenticateToken,userAddLibrary)
 route.post('/mylibrary',authenticateToken,userLibrary)
+route.get('/requests',allRequest)
 
 export default route

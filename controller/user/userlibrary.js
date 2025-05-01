@@ -12,7 +12,7 @@ export const userAddLibrary = async (req, res) => {
         }
 
         // const user = await userModel.findById(userId)
-      await bookModel.updateOne({_id:bookId},{availabilityStatus:false})
+        await bookModel.updateOne({ _id: bookId }, { availabilityStatus: false })
 
         await libTransationModel.updateOne({ userdetails: userId, bookdetails: bookId }, {
             $set: { userdetails: userId, bookdetails: bookId }
@@ -43,5 +43,23 @@ export const userLibrary = async (req, res) => {
 
     } catch (err) {
         console.log(err)
+    }
+}
+
+export const allRequest = async (req, res) => {
+    try {
+
+        const allRequest = await libTransationModel
+            .find({}).lean()
+            .populate('userdetails')
+            .populate('bookdetails')
+
+        return res.json({
+            success: true,
+            message: "",
+            allRequest
+        })
+    } catch (e) {
+        console.log(e)
     }
 }
