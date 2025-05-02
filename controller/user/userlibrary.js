@@ -11,12 +11,11 @@ export const userAddLibrary = async (req, res) => {
             return res.status(400).json({ message: "userId and bookId are required" });
         }
 
-        // const user = await userModel.findById(userId)
-        await bookModel.updateOne({ _id: bookId }, { availabilityStatus: false })
-
         await libTransationModel.updateOne({ userdetails: userId, bookdetails: bookId }, {
             $set: { userdetails: userId, bookdetails: bookId }
         }, { upsert: true })
+
+        await bookModel.updateOne({ _id: bookId }, { availabilityStatus: false })
 
         return res.json({
             success: true,
@@ -50,7 +49,7 @@ export const allRequest = async (req, res) => {
     try {
 
         const allRequest = await libTransationModel
-            .find({isapproved:false}).lean()
+            .find({ isapproved: false }).lean()
             .populate('userdetails')
             .populate('bookdetails')
 
