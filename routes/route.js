@@ -2,7 +2,7 @@ import express from "express";
 
 import { sigIn, signUp } from "../controller/user/userAuth.js";
 import { adminSignIn, adminSignUp } from "../controller/admin/adminAuth.js";
-import { addBook, getAllBooks } from "../controller/books/addBook.js";
+import { addBook, deleteBook, getAllBooks, updateBook } from "../controller/books/addBook.js";
 import { getAllUsers } from "../controller/user/user.js";
 import authenticateToken from "../middleware/authentication.js";
 import { dashboardOvrView } from "../controller/admin/dashboard.js";
@@ -19,6 +19,8 @@ route.post('/signin',sigIn)
 
 route.get('/getbook',getAllBooks)
 route.post('/addbook',authenticateToken,addBook)
+route.post('/updatebook',authenticateToken,updateBook)
+route.delete('/deletebook',authenticateToken,deleteBook)
 
 route.get('/getdashboardcount',authenticateToken,dashboardOvrView)
 route.get('/getusers',authenticateToken,getAllUsers)

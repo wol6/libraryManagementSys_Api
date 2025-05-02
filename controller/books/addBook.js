@@ -4,9 +4,9 @@ import { bookModel } from "../../schema/books/books.js"
 export const getAllBooks = async (req, res) => {
     try {
         let filterObj = {}
-        const page =parseInt( req.query.page) || 0
-        const booksPerPage = parseInt( req.query.limit)
-        const books = await bookModel.find(filterObj).lean().skip(page*booksPerPage).limit(booksPerPage)
+        const page = parseInt(req.query.page) || 0
+        const booksPerPage = parseInt(req.query.limit)
+        const books = await bookModel.find(filterObj).lean().skip(page * booksPerPage).limit(booksPerPage)
 
         if (!books) {
             return res.json({
@@ -61,5 +61,41 @@ export const addBook = async (req, res) => {
         })
     } catch (err) {
         console.log(err)
+    }
+}
+
+export const updateBook = async (req, res) => {
+    try {
+        const { _id, bookname, author, imgurl } = req.body
+
+        if (!_id) return res.json({ success: false, msg: 'Id required' })
+
+        await bookModel.updateOne({ _id }, { bookname, author, imgurl })
+
+        return res.json({
+            success: true,
+            msg: 'Updated'
+        })
+
+        console.log(test)
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export const deleteBook = async (req, res) => {
+    try {
+        const  {id}  = req.body
+        if (!id) return res.json({ success: false, msg: 'Id required' })
+
+        await bookModel.findByIdAndDelete({ _id: id })
+
+        return res.json({
+            success: true,
+            msg: 'Deleted'
+        })
+
+    } catch (e) {
+        console.log(e)
     }
 }
