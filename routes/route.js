@@ -3,7 +3,7 @@ import express from "express";
 import { sigIn, signUp } from "../controller/user/userAuth.js";
 import { adminSignIn, adminSignUp } from "../controller/admin/adminAuth.js";
 import { addBook, deleteBook, getAllBooks, updateBook } from "../controller/books/addBook.js";
-import { getAllUsers } from "../controller/user/user.js";
+import { deleteUser, getAllUsers, updateUser } from "../controller/user/user.js";
 import authenticateToken from "../middleware/authentication.js";
 import { dashboardOvrView } from "../controller/admin/dashboard.js";
 import { searchBook } from "../controller/books/searchBook.js";
@@ -24,6 +24,8 @@ route.delete('/deletebook',authenticateToken,deleteBook)
 
 route.get('/getdashboardcount',authenticateToken,dashboardOvrView)
 route.get('/getusers',authenticateToken,getAllUsers)
+route.post('/updateuser',authenticateToken,updateUser)
+route.delete('/deleteuser',authenticateToken,deleteUser)
 route.get('/search',searchBook)
 route.post('/updatelibrary',authenticateToken,userAddLibrary)
 route.post('/mylibrary',authenticateToken,userLibrary)
