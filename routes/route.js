@@ -7,7 +7,7 @@ import { deleteUser, getAllUsers, updateUser } from "../controller/user/user.js"
 import authenticateToken from "../middleware/authentication.js";
 import { dashboardOvrView } from "../controller/admin/dashboard.js";
 import { searchBook } from "../controller/books/searchBook.js";
-import { allRequest, approveReq, noApproval, userAddLibrary, userLibrary } from "../controller/user/userlibrary.js";
+import { allRequest, allReturnRequest, approveReq, noApproval, userAddLibrary, userLibrary } from "../controller/user/userlibrary.js";
 
 const route = express.Router()
 
@@ -30,6 +30,7 @@ route.get('/search',searchBook)
 route.post('/updatelibrary',authenticateToken,userAddLibrary)
 route.post('/mylibrary',authenticateToken,userLibrary)
 route.get('/requests',authenticateToken,allRequest)
+route.get('/returnreq',authenticateToken,allReturnRequest)
 route.post('/approve',authenticateToken,approveReq)
 route.post('/decline',authenticateToken,noApproval)
 

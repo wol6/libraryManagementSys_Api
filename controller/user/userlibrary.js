@@ -63,6 +63,24 @@ export const allRequest = async (req, res) => {
     }
 }
 
+export const allReturnRequest = async (req, res) => {
+    try {
+
+        const allRequest = await libTransationModel
+            .find({ isapproved: true }).lean()
+            .populate('userdetails')
+            .populate('bookdetails')
+
+        return res.json({
+            success: true,
+            message: "",
+            allRequest
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 export const approveReq = async (req, res) => {
     try {
         const { id } = req.body
