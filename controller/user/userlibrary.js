@@ -83,7 +83,6 @@ export const noApproval = async (req, res) => {
         const { id } = req.body
 
         const details = await libTransationModel.findOne({ _id: id }).lean()
-        console.log(details)
         await bookModel.updateOne({ _id: details.bookdetails }, { availabilityStatus: true })
         await libTransationModel.findByIdAndDelete({ _id: id })
 
