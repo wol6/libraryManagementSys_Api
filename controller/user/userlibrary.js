@@ -46,6 +46,23 @@ export const userLibrary = async (req, res) => {
     }
 }
 
+export const myLibrary = async (req, res) => {
+    try {
+        const userid = req.query.userId
+        const mylibrary = await libTransationModel.find({ userdetails: userid })
+            .populate('bookdetails')
+
+        return res.json({
+            success: true,
+            message: "",
+            mylibrary
+        })
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 export const allRequest = async (req, res) => {
     try {
 
