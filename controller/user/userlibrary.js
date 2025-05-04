@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 import { bookModel } from "../../schema/books/books.js"
 import { libTransationModel } from "../../schema/books/libtransaction.js"
 import { userModel } from "../../schema/user/user.js"
@@ -66,6 +67,20 @@ export const allRequest = async (req, res) => {
 export const allReturnRequest = async (req, res) => {
     try {
 
+        const dueDate = req.query.dueDate
+
+        if (dueDate) {
+            //2025-05-11T00:00:00.000+00:00
+            const dt = dayjs().startOf('day').format('YYYY-MM-DD')
+            const allRequest = await libTransationModel.
+                find({ duedate: dt }).lean().populate('userdetails').populate('bookdetails')
+            return res.json({
+                success: true,
+                message: "",
+                allRequest
+            })
+        }
+
         const allRequest = await libTransationModel
             .find({ isapproved: true }).lean()
             .populate('userdetails')
@@ -85,7 +100,8 @@ export const approveReq = async (req, res) => {
     try {
         const { id } = req.body
 
-        await libTransationModel.updateOne({ _id: id }, { isapproved: true })
+        const duedate = dayjs().add(7, 'days').format('YYYY-MM-DD')
+        await libTransationModel.updateOne({ _id: id }, { isapproved: true, duedate })
 
         return res.json({
             success: true,
